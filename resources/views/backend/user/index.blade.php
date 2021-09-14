@@ -9,7 +9,7 @@
                 <i class="pe-7s-users icon-gradient bg-mean-fruit">
                 </i>
             </div>
-            <div>User List</div>
+            <div>User List View</div>
         </div>
     </div>
 </div>

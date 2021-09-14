@@ -9,7 +9,7 @@
                 <i class="pe-7s-users icon-gradient bg-mean-fruit">
                 </i>
             </div>
-            <div>Edit User</div>
+            <div>Edit Users Page</div>
         </div>
     </div>
 </div>
