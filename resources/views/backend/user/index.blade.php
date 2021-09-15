@@ -66,15 +66,15 @@
                     name: "ip"
                 },
                 {
-                    data: "login_at",
-                    name: "login_at"
-                },
-                {
                     //one way column editing
                     data: "user_agent",
                     name: "user_agent",
                     sortable : false,
                     searchable : false
+                },
+                {
+                    data: "login_at",
+                    name: "login_at"
                 },
                 {
                     data: "created_at",
@@ -91,7 +91,7 @@
 
             ],
             order: [
-                [7, 'desc']
+                [7, 'desc'] //updated_at nae order 
             ],
             //two way column editing
             "columnDefs": [{

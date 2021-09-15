@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 
@@ -47,5 +48,16 @@ class LoginController extends Controller
     public function showLoginForm()
     {
         return view('auth.login');
+    }
+
+    //login win p dr nae users table ko ip,agent,logined date htae mar
+    protected function authenticated(Request $request, $user)
+    {
+        //logined user
+        $user->ip = $request->ip();
+        $user->user_agent = $request->server('HTTP_USER_AGENT');
+        $user->login_at = date('Y-m-d H:i:');
+        $user->update();
+        return redirect($this->redirectTo);
     }
 }
