@@ -14,7 +14,7 @@ class WalletController extends Controller
     }
     public function ssd()
     {
-        $wallets = Wallet::query();
+        $wallets =  Wallet::query();
         return Datatables::of($wallets)
                 ->editColumn('created_at',function($wallet){
                     return Carbon::parse($wallet->created_at)->format("Y-m-d H:m:s");//laravel carbon default package
