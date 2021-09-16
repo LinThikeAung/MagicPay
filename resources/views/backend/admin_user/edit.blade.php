@@ -35,7 +35,7 @@
                 </div>
                 <div class="form-group">
                     <label for="">Phone</label>
-                    <input type="number" name="phone" value="{{ $user->phone }}" class="form-control">
+                    <input type="text" name="phone" value="{{ $user->phone }}" class="form-control">
                 </div>
                 <div class="d-flex justify-content-center">
                     <button class="btn btn-secondary mr-3 back-btn">Cancel</button>

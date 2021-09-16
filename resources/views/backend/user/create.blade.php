@@ -17,7 +17,7 @@
 <div class="content pt-3">
     <div class="card">
         <div class="card-body">
-            {{-- @include('backend.layouts.errors') --}}
+            @include('backend.layouts.errors')
             <form action="{{ route('admin.user.store') }}" method="POST" id="create_admin">
                 @csrf
                 <div class="form-group">
@@ -34,7 +34,7 @@
                 </div>
                 <div class="form-group">
                     <label for="">Phone</label>
-                    <input type="number" name="phone" class="form-control">
+                    <input type="text" name="phone" class="form-control">
                 </div>
                 <div class="d-flex justify-content-center">
                     <button class="btn btn-secondary mr-3 back-btn">Cancel</button>

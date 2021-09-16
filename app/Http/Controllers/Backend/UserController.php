@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\Backend;
 
-use Yajra\Datatables\Datatables;
+use App\User;
+use App\Wallet;
+use Carbon\Carbon;
 use Jenssegers\Agent\Agent;
+use App\Http\Requests\StoreUser;
+use Yajra\Datatables\Datatables;
+use App\Http\Requests\UpdateUser;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Requests\UpdateUser;
-use App\Http\Requests\StoreUser;
-use Carbon\Carbon;
-use App\User;
+use App\Helpers\AccountGenerator;
 
 class UserController extends Controller
 {
@@ -61,13 +64,35 @@ class UserController extends Controller
     }
 
     public function store(StoreUser $request){
-        $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password =Hash::make($request->password);
-        $user->phone = $request->phone;
-        $user->save();
-        return redirect()->route('admin.user.index')->with("created","Created Successfully");
+
+        DB::beginTransaction();
+        try{
+            $user = new User();
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->password =Hash::make($request->password);
+            $user->phone = $request->phone;
+            $user->save();
+
+            //d user nae pat that de data shi yin ma lote bu , ma shi yin insert mal
+            $user = Wallet::firstOrCreate(
+                [
+                    'user_id' =>  $user->id //like where condition , wallet mar logined user's wallet shi ma shi user_id nae check htr dr
+                ],
+                [
+                    'account_number' => AccountGenerator::accountNumber(),//no need to wake up class using $number = new AccountGenerator ,, $number.accountNumber()
+                    'amount' => 0,
+                ],
+            );
+            DB::commit();
+
+            return redirect()->route('admin.user.index')->with("created","Created Successfully");
+        }
+        catch (\Exception $e){
+            DB::rollback();
+            return back()->withErrors(['failed'=>'Something was wrong'.$e->getMessage()])->withInput();
+            //return back go to this page if errors got
+        }
     }
 
     public function edit($id){

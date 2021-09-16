@@ -34,20 +34,26 @@
                 <li class="app-sidebar__heading">Magic Pay</li>
                 <li>
                     <a href="{{ route('admin.home') }}" class="@yield('home active')">
-                        <i class="metismenu-icon pe-7s-rocket"></i>
+                        <i class="fas fa-archway"></i>
                         Admin Dashboard
                     </a>
                 </li>
                 <li>
                     <a href="{{ route('admin.admin-user.index') }}" class="@yield('home adminuser active')">
-                        <i class="metismenu-icon pe-7s-rocket"></i>
+                        <i class="fas fa-users-cog"></i>
                         Admin Users
                     </a>
                 </li>
                 <li>
                     <a href="{{ route('admin.user.index') }}" class="@yield('home user active')">
-                        <i class="metismenu-icon pe-7s-rocket"></i>
+                        <i class="fas fa-users"></i>
                         Users
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.wallet.index') }}" class="@yield('wallet active')">
+                        <i class="fas fa-wallet"></i>
+                        User Wallet
                     </a>
                 </li>
             </ul>
