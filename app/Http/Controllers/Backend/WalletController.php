@@ -14,7 +14,8 @@ class WalletController extends Controller
     }
     public function ssd()
     {
-        $wallets =  Wallet::query();
+        $wallets =  Wallet::with('users');
+        //wallet nae users table ko eloquent thone htr loz waller and users ko with nae htoke dr
         return Datatables::of($wallets)
                 ->editColumn('created_at',function($wallet){
                     return Carbon::parse($wallet->created_at)->format("Y-m-d H:m:s");//laravel carbon default package
