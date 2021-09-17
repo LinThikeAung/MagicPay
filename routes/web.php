@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\CssSelector\Node\FunctionNode;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,9 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//normal user auth
-Auth::routes();
-
 //admin user auth
 Route::get('/admin/login','Auth\AdminLoginController@showLoginForm');
 Route::post('/admin/login','Auth\AdminLoginController@Login')->name('admin.login');
@@ -23,7 +21,14 @@ Route::post('/admin/login','Auth\AdminLoginController@Login')->name('admin.login
 Route::post('/admin/logout','Auth\AdminLoginController@logout')->name('admin.logout');
 
 
-Route::get('/',"Frontend\PageController@home");
+
+//normal user auth
+Auth::routes();
+Route::middleware('auth')->namespace('Frontend')->group(function(){//to login
+    Route::get("/","PageController@home")->name("home");
+    Route::get("/profile","PageController@profile")->name("profile");
+});
+
 
 
 
