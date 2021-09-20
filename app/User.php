@@ -39,6 +39,6 @@ class User extends Authenticatable
     ];
 
     public function wallet(){
-        return $thid->hasOne(Wallet::class,'user_id','id');//(Model name, foreign key, primary key)
+        return $this->hasOne(Wallet::class,'user_id','id');//(Model name, foreign key, primary key)
     }
 }

@@ -60,4 +60,26 @@ class LoginController extends Controller
         $user->update();
         return redirect($this->redirectTo);
     }
+
+
+    //customize return logout type
+    // logout call lite dr nae redirect link ma pyan bal ajax response type json pyan lar say chin loz
+    // change new 'Response(['success'], 204)'-> json return type 'response()->json([],204)'
+
+    public function logout(Request $request)
+    {
+        $this->guard()->logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        if ($response = $this->loggedOut($request)) {
+            return $response;
+        }
+
+        return $request->wantsJson()
+            ? response()->json([],204)//for accept json and so return this format json
+            : redirect('/');
+    }
 }
