@@ -26,10 +26,19 @@ Route::post('/admin/logout','Auth\AdminLoginController@logout')->name('admin.log
 Auth::routes();
 Route::middleware('auth')->namespace('Frontend')->group(function(){//to login
     Route::get("/","PageController@home")->name("home");
+
     Route::get("/profile","PageController@profile")->name("profile");
+
     Route::get('/update-password','PageController@updatePassword')->name('update-password');
     Route::post('/update-password','PageController@storeUpdatePassword')->name('update-password.store');
+
     Route::get('/wallet','PageController@showWallet')->name('wallet');
+
+    Route::get('/transfer','PageController@showTransfer')->name('transfer');
+    Route::post('/transfer/confirm','PageController@transferConfirm');
+    Route::post('/transfer/complete','PageController@transferComplete');
+    Route::get('/transfer/confirm/password','PageController@checkPassword');
+    Route::get('/to-account-verify','PageController@accountVerify');
 });
 
 

@@ -178,6 +178,13 @@
     });
 @endif
 
+@if(session('transfered'))//session will come from backend redirect with() function
+    Toast.fire({
+    icon: 'success',
+    title: "{{ session('transfered') }}",
+    });
+@endif
+
 $('.back-btn').on('click',function(e){
     e.preventDefault();
     window.history.go(-1);

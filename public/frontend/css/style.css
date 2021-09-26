@@ -141,4 +141,8 @@ body{
    width: 30px;
    height: 30px;
 }
+.home-wallet a{
+    text-decoration: none;
+    color:#333
+}
 
