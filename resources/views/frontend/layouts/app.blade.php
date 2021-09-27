@@ -122,7 +122,7 @@
                             </a>
                         </div>
                         <div class="col-md-3 text-center">
-                            <a href="">
+                            <a href="{{ url('/transaction') }}">
                                 <i class="fas fa-exchange-alt"></i>
                                 <p class="mb-5">Transaction</p>
                             </a>
@@ -145,6 +145,9 @@
     <script type="text/javascript" src="{{ url('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
     <!--SweetAlert2-->
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- JScroll-->
+    <script src="{{ asset('frontend/css/js/jscroll.min.js') }}"></script>
     <script>
     //common for GET and POST CSRF field
     // $(document).ready(function(){

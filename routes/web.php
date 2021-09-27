@@ -37,8 +37,12 @@ Route::middleware('auth')->namespace('Frontend')->group(function(){//to login
     Route::get('/transfer','PageController@showTransfer')->name('transfer');
     Route::post('/transfer/confirm','PageController@transferConfirm');
     Route::post('/transfer/complete','PageController@transferComplete');
+
     Route::get('/transfer/confirm/password','PageController@checkPassword');
     Route::get('/to-account-verify','PageController@accountVerify');
+
+    Route::get('/transaction','PageController@transaction');
+    Route::get('/transaction/detail/{id}','PageController@transactionDetail');
 });
 
 

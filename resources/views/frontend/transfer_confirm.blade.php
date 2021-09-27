@@ -56,7 +56,7 @@ $(document).ready(function(){
         Swal.fire({
         title: 'Please enter your password',
         icon: 'info',
-        html:'<input type="password" name="password" class="form-control text-center check-password">',
+        html:'<input type="password" name="password" class="form-control text-center check-password" autofocus>',
         showCancelButton: true,
         confirmButtonText: "Confirm",
         cancelButtonText: "Cancel"
