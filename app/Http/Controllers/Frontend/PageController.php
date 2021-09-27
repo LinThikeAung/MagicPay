@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Helpers\AccountGenerator;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\Transfer;
@@ -9,7 +10,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\UpdatePassword;
-use Laravel\Ui\Presets\React;
+use App\Transaction;
+use Illuminate\Support\Facades\DB;
 
 class PageController extends Controller
 {
@@ -101,15 +103,46 @@ class PageController extends Controller
             return back()->withErrors(['tophone'=>'Account does not exist.'])->withInput();
         }
 
-        $from_account_wallet = $from_account->wallet;//sender
-        $from_account_wallet->decrement('amount',$amount);//from_account ka wallet amount ko Request ka lar de amount reduce mal
-        $from_account_wallet->update();//reduce p yin update lote
+        DB::beginTransaction();
+        try{
+            $from_account_wallet = $from_account->wallet;//sender
+            $from_account_wallet->decrement('amount',$amount);//from_account ka wallet amount ko Request ka lar de amount reduce mal
+            $from_account_wallet->update();//reduce p yin update lote
 
-        $to_account_wallet = $to_account->wallet;//receiver
-        $to_account_wallet->increment('amount',$amount);
-        $to_account_wallet->update();
+            $to_account_wallet = $to_account->wallet;//receiver
+            $to_account_wallet->increment('amount',$amount);
+            $to_account_wallet->update();
 
-        return redirect('/')->with('transfered','Transfered Successfully');
+
+            $refNumber = AccountGenerator::refNumber();
+
+            $from_account_transaction = new Transaction();
+            $from_account_transaction->ref_no= $refNumber;
+            $from_account_transaction->trx_id= AccountGenerator::trxId();
+            $from_account_transaction->user_id= $from_account->id;
+            $from_account_transaction->type= 2;
+            $from_account_transaction->amount= $amount;
+            $from_account_transaction->source_id= $to_account->id;
+            $from_account_transaction->description= $description;
+            $from_account_transaction->save();
+
+            $to_account_transaction = new Transaction();
+            $to_account_transaction->ref_no= $refNumber;
+            $to_account_transaction->trx_id= AccountGenerator::trxId();
+            $to_account_transaction->user_id= $to_account->id;
+            $to_account_transaction->type= 1;
+            $to_account_transaction->amount= $amount;
+            $to_account_transaction->source_id= $from_account->id;
+            $to_account_transaction->description= $description;
+            $to_account_transaction->save();
+
+
+            DB::commit();
+            return redirect('/transaction/detail/'.$from_account_transaction->trx_id)->with('transfered','Transfered Successfully');
+        }catch(\Exception $e){
+            DB::rollback();
+            return back()->withErrors(['failed'=>'Something was wrong'.$e->getMessage()])->withInput();
+        }
     }
 
     public function accountVerify(Request $request){
@@ -141,5 +174,22 @@ class PageController extends Controller
         }else{
             return response()->json(['status' => 'fail', 'message' => "Password is incorrect"]);
         }
+    }
+
+
+    public function transaction(){
+
+        $Authuser = Auth::guard('web')->user();
+
+        //elga funtion with()=>  user and source ka transaction model mar connect thr dl
+        $transactions = Transaction::with('user','source')->OrderBy('created_at','desc')->where('user_id',$Authuser->id)->paginate(2);
+        return view('frontend.transaction',compact('transactions'));
+    }
+
+    public function transactionDetail($trx_id){
+
+        $Authuser = Auth::guard('web')->user();
+        $transactions = Transaction::with('user','source')->where('user_id',$Authuser->id)->where('trx_id',$trx_id)->first();
+        return view('frontend.transactionDetail',compact('transactions'));
     }
 }
