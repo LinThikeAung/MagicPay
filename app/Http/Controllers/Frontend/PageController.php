@@ -177,12 +177,20 @@ class PageController extends Controller
     }
 
 
-    public function transaction(){
+    public function transaction(Request $request){
 
         $Authuser = Auth::guard('web')->user();
 
         //elga funtion with()=>  user and source ka transaction model mar connect thr dl
-        $transactions = Transaction::with('user','source')->OrderBy('created_at','desc')->where('user_id',$Authuser->id)->paginate(2);
+        $transactions = Transaction::with('user','source')->OrderBy('created_at','desc')->where('user_id',$Authuser->id);//get and paginage ma thone htr dot data ma par thay buu //query bal yay htr dr
+        if($request->type){
+            $transactions = $transactions->where('type',$request->type);
+        }
+
+        if($request->date){
+            $transactions = $transactions->whereDate('created_at',$request->date);//testing date
+        }
+        $transactions = $transactions->paginate(3);
         return view('frontend.transaction',compact('transactions'));
     }
 
