@@ -52,6 +52,15 @@ class PageController extends Controller
 
     public function transferConfirm(Transfer $request){
 
+        $hashString = $request->tophone.$request->amount.$request->description;
+        $hashValue = hash_hmac('sha256',$hashString,'magicPay123!@#');
+
+        $hashValue = $hashValue;
+
+        if($request->hashVal !== $hashValue){
+            //return back()->withErrors(['hash'=>'The given data is invalid.'])->withInput();
+        }
+
         if($request->amount < 1000){
             return back()->withErrors(['amount'=>'At least 1000MMK is required.'])->withInput();
         }
@@ -70,7 +79,7 @@ class PageController extends Controller
         $from_account = $user;
         $amount = $request->amount;
         $description = $request->description;
-        return view('frontend.transfer_confirm',compact('from_account','to_account','amount','description'));
+        return view('frontend.transfer_confirm',compact('from_account','to_account','amount','description','hashValue'));
     }
 
     public function transferComplete(Request $request){
@@ -199,5 +208,16 @@ class PageController extends Controller
         $Authuser = Auth::guard('web')->user();
         $transactions = Transaction::with('user','source')->where('user_id',$Authuser->id)->where('trx_id',$trx_id)->first();
         return view('frontend.transactionDetail',compact('transactions'));
+    }
+
+    public function hashTransfer(Request $request){
+
+        $hashString = $request->tophone.$request->amount.$request->description;
+        $hashValue = hash_hmac('sha256',$hashString,'magicPay123!@#');
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $hashValue
+        ]);
     }
 }

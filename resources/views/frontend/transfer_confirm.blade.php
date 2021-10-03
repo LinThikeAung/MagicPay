@@ -15,8 +15,7 @@
                     @endif
                     <form action="{{ url('/transfer/complete') }}" method="POST" id="sendComplete">
                         @csrf
-                        <input type="hidden" name="fromname" value="{{ $from_account->name }}">
-                        <input type="hidden" name="fromphone" value="{{ $from_account->phone}}">
+                        <input type="hidden" name="hashVal" value="{{ $hashValue }}">
                         <input type="hidden" name="tophone" value="{{ $to_account->phone }}">
                         <input type="hidden" name="amount" value="{{ $amount }}">
                         <input type="hidden" name="description" value="{{ $description }}">

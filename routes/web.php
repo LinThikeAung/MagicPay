@@ -43,6 +43,8 @@ Route::middleware('auth')->namespace('Frontend')->group(function(){//to login
 
     Route::get('/transaction','PageController@transaction');
     Route::get('/transaction/detail/{id}','PageController@transactionDetail');
+
+    Route::get('/transfer-hash','PageController@hashTransfer')->name('transfer-hash');
 });
 
 
