@@ -198,6 +198,6 @@ $('.back-btn').on('click',function(e){
 
 })
     </script>
-    @yield('scripts')
+@yield('scripts')
 </body>
 </html>
